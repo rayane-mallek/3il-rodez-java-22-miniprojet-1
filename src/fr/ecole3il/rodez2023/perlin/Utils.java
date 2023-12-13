@@ -45,14 +45,21 @@ public class Utils {
      * @param seed La graine utilisée pour le mélange.
      * @return Un nouveau tableau contenant les éléments mélangés.
      * 
-     * @author philibert roquart, fainéant
+     * @author -philibert roquart- Rayane Mallek
      */
     public static int[] melanger(int[] tab, long seed) {
-        // Mélanger le tableau de permutation en utilisant 
-    	// ...
-    	// Bon, je le ferai plus tard, je vais réviser l'espagnol
-    	// Je mets ça, ça marchera bien en attendant
-    	// tant pis
+        Random random = new Random(seed);
+
+        // Mélanger le tableau de permutation en utilisant l'algorithme Fisher-Yates
+        for (int i = tab.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+
+            // Échanger les éléments aux positions i et j
+            int temp = tab[i];
+            tab[i] = tab[j];
+            tab[j] = temp;
+        }
+
         return tab;
     }
 
@@ -62,11 +69,10 @@ public class Utils {
      * @param height Le deuxième nombre.
      * @return Le plus petit des deux nombres.
      * 
-     * @author philibert roquart, fainéant
+     * @author -philibert roquart- Rayane Mallek
      */
     public static double min(int width, int height) {
-    	// pas le temps, j'ai mes exos de chimie à finir
-    	return 1;
+    	return Math.min(width, height);
     }
 
     /**
