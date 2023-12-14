@@ -9,13 +9,13 @@ import java.awt.image.BufferedImage;
  */
 public enum TypeTerrain {
     COLLINES("Collines"),
-    DESERTS("Déserts"),
-    FORETS_CONIFERES("Forêts de Conifères"),
-    FORETS_FEUILLUS("Forêts de Feuillus"),
+    DESERT("Déserts"),
+    FORET_CONIFÈRES("Forêts de Conifères"),
+    FORET_FEUILLUS("Forêts de Feuillus"),
     MARAIS("Marais"),
-    MONTAGNES("Montagnes"),
-    OCEANS("Océans"),
-    PLAINES("Plaines"),
+    MONTAGNE("Montagnes"),
+    OCEAN("Océans"),
+    PLAINE("Plaines"),
     TOUNDRA("Toundra");
 
     private final String nom;
