@@ -4,7 +4,18 @@ package fr.ecole3il.rodez2023.perlin.math;
 import fr.ecole3il.rodez2023.perlin.Utils;
 
 /**
- * @author philibert roquart, fainéant
+ * Implémentation de bruit de Perlin en 2D.
+ *
+ * <p>
+ * Cette classe génère du bruit de Perlin bidimensionnel en utilisant une grille de vecteurs de gradient
+ * et des interpolations pour produire un motif de bruit lisse.
+ * </p>
+ *
+ * <p>
+ * Basé sur l'algorithme original de Ken Perlin.
+ * </p>
+ *
+ * @author -Philibert Roquart- Rayane Mallek
  */
 public class BruitPerlin2D extends Bruit2D {
 
@@ -28,63 +39,75 @@ public class BruitPerlin2D extends Bruit2D {
 
 	private final int[] permutation;
 
+	/**
+	 * Constructeur pour initialiser le bruit de Perlin en 2D avec une graine et une résolution spécifiées.
+	 *
+	 * @param graine      La graine utilisée pour générer le bruit.
+	 * @param resolution  La résolution du bruit.
+	 */
 	public BruitPerlin2D(long graine, double resolution) {
 		super(graine, resolution);
 		this.permutation = Utils.melanger(PERMUTATION, graine);
 	}
 
+	/**
+	 * Génère une valeur de bruit de Perlin bidimensionnel à la position spécifiée.
+	 *
+	 * @param x La coordonnée x de la position.
+	 * @param y La coordonnée y de la position.
+	 * @return La valeur de bruit de Perlin à la position donnée.
+	 */
 	@Override
 	public double bruit2D(double x, double y) {
+		double tempX, tempY;
+		int x0, y0, ii, jj, gi0, gi1, gi2, gi3;
+		double unit = 1.0f / (double) Math.sqrt(2);
+		double tmp, s, t, u, v, Cx, Cy, Li1, Li2;
 		// Adapter pour la résolution
 		x /= getResolution();
 		y /= getResolution();
 
 		// Obtenir les coordonnées de la grille associées à (x, y)
-		int x0 = (int) (x);
-		int y0 = (int) (y);
+		x0 = (int) (x);
+		y0 = (int) (y);
 
 		// Masquage pour récupérer les indices de permutation
-		int ii = x0 & 255;
-		int jj = y0 & 255;
+		ii = x0 & 255;
+		jj = y0 & 255;
 
 		// Récupérer les indices de gradient associés aux coins du quadrilatère
-		int gi0 = permutation[ii + permutation[jj]] % 8;
-		int gi1 = permutation[ii + 1 + permutation[jj]] % 8;
-		int gi2 = permutation[ii + permutation[jj + 1]] % 8;
-		int gi3 = permutation[ii + 1 + permutation[jj + 1]] % 8;
+		gi0 = permutation[ii + permutation[jj]] % 8;
+		gi1 = permutation[ii + 1 + permutation[jj]] % 8;
+		gi2 = permutation[ii + permutation[jj + 1]] % 8;
+		gi3 = permutation[ii + 1 + permutation[jj + 1]] % 8;
 
 		// Récupérer les vecteurs de gradient et effectuer des interpolations pondérées
-		double s = produitScalaire(GRADIENT_2D[gi0], x - x0, y - y0);
-		double t = produitScalaire(GRADIENT_2D[gi1], x - (x0 + 1), y - y0);
-		double u = produitScalaire(GRADIENT_2D[gi2], x - x0, y - (y0 + 1));
-		double v = produitScalaire(GRADIENT_2D[gi3], x - (x0 + 1), y - (y0 + 1));
+		tempX = x - x0;
+		tempY = y - y0;
+		s = GRADIENT_2D[gi0][0] * tempX + GRADIENT_2D[gi0][1] * tempY;
+
+		tempX = x - (x0 + 1);
+		tempY = y - y0;
+		t = GRADIENT_2D[gi1][0] * tempX + GRADIENT_2D[gi1][1] * tempY;
+
+		tempX = x - x0;
+		tempY = y - (y0 + 1);
+		u = GRADIENT_2D[gi2][0] * tempX + GRADIENT_2D[gi2][1] * tempY;
+
+		tempX = x - (x0 + 1);
+		tempY = y - (y0 + 1);
+		v = GRADIENT_2D[gi3][0] * tempX + GRADIENT_2D[gi3][1] * tempY;
 
 		// Interpolations pour lisser les valeurs obtenues
-		double tmp = x - x0;
-		double Cx = lissage(3 * tmp * tmp - 2 * tmp * tmp * tmp);
+		tmp = x - x0;
+		Cx = 3 * tmp * tmp - 2 * tmp * tmp * tmp;
 
-		double Li1 = s + Cx * (t - s);
-		double Li2 = u + Cx * (v - u);
+		Li1 = s + Cx * (t - s);
+		Li2 = u + Cx * (v - u);
 
 		tmp = y - y0;
-		double Cy = lissage(3 * tmp * tmp - 2 * tmp * tmp * tmp);
+		Cy = 3 * tmp * tmp - 2 * tmp * tmp * tmp;
 
 		return Li2 + Cy * (Li2 - Li1);
 	}
-
-	private double produitScalaire(double[] vecteur, double x, double y) {
-		return vecteur[0] * x + vecteur[1] * y;
-	}
-
-	private double lissage(double t) {
-		// Appliquer une fonction de lissage spécifique à Perlin
-		// Assurez-vous de gérer les erreurs d'arrondi avec soin ici
-		return t * t * t * (t * (t * 6 - 15) + 10);
-	}
-
-	private double interpolation(double t, double a, double b) {
-		// Effectuer une interpolation linéaire
-		return a + t * (b - a);
-	}
-
 }
