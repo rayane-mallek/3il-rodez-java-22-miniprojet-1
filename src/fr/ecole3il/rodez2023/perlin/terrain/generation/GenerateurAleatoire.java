@@ -30,9 +30,6 @@ public class GenerateurAleatoire extends GenerateurCarte {
     @Override
     protected Terrain genererTerrain(int i, int j, int largeur, int hauteur) {
         // Génération aléatoire des valeurs d'altitude, hydrométrie et température
-        int altitude = random.nextInt(101); // Valeurs entre 0 et 100 inclus
-        int hydrometrie = random.nextInt(101);
-        int temperature = random.nextInt(101);
-        return new Terrain(altitude, hydrometrie, temperature);
+        return new Terrain(random.nextDouble(), random.nextDouble(), random.nextDouble());
     }
 }

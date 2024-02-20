@@ -8,15 +8,15 @@ import java.awt.image.BufferedImage;
  * Cette énumération représente différents types de terrain pour la génération de cartes 2D.
  */
 public enum TypeTerrain {
-    COLLINES("Collines"),
-    DESERT("Déserts"),
-    FORET_CONIFÈRES("Forêts de Conifères"),
-    FORET_FEUILLUS("Forêts de Feuillus"),
-    MARAIS("Marais"),
-    MONTAGNE("Montagnes"),
-    OCEAN("Océans"),
-    PLAINE("Plaines"),
-    TOUNDRA("Toundra");
+    COLLINES("Hills"),
+    DESERT("Desert"),
+    FORET_CONIFÈRES("Coniferous_Forest"),
+    FORET_FEUILLUS("Deciduous_Forest"),
+    MARAIS("Marsh"),
+    MONTAGNE("Mountain"),
+    OCEAN("Ocean"),
+    PLAINE("Plain"),
+    TOUNDRA("Tundra");
 
     private final String nom;
 

@@ -87,13 +87,16 @@ public class SuperBruitPerlin2D extends Bruit2D {
         double tmp = x - x0;
         double Cx = lissage(3 * tmp * tmp - 2 * tmp * tmp * tmp);
 
-        double Li1 = s + Cx * (t - s);
-        double Li2 = u + Cx * (v - u);
+        //double Li1 = s + Cx * (t - s);
+        //double Li2 = u + Cx * (v - u);
+        double Li1 = interpolation(Cx, s, t);
+        double Li2 = interpolation(Cx, u, v);
 
         tmp = y - y0;
         double Cy = lissage(3 * tmp * tmp - 2 * tmp * tmp * tmp);
 
-        return Li2 + Cy * (Li2 - Li1);
+        //return Li2 + Cy * (Li2 - Li1);
+        return interpolation(Cy, Li2, Li1);
     }
 
     private double produitScalaire(double[] vecteur, double x, double y) {
