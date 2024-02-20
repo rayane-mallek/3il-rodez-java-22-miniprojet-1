@@ -15,21 +15,48 @@ public class VisualiseurTerrain {
 
     public TemperatureAffichee getTemperatureAffichee(int x, int y) {
         Terrain terrain = carte.getTerrain(x, y);
-        determineurTerrain.determinerTerrain(terrain.getAltitude(), terrain.getHydrometrie(), terrain.getTemperature());
+
+        if (terrain.getTemperature() < 0.33) {
+            return TemperatureAffichee.FROID;
+        } else if (terrain.getTemperature() < 0.66) {
+            return TemperatureAffichee.TEMPERE;
+        }
+
+        return TemperatureAffichee.CHAUD;
     }
 
     public AltitudeAffichee getAltitudeAffichee(int x, int y) {
         Terrain terrain = carte.getTerrain(x, y);
-        determineurTerrain.determinerTerrain(terrain.getAltitude(), terrain.getHydrometrie(), terrain.getTemperature();
+
+        if (terrain.getAltitude() < 0 ) {
+            return AltitudeAffichee.FOND_MARIN;
+        } else if (terrain.getAltitude() < 0.33) {
+            return AltitudeAffichee.BASSE;
+        } else if (terrain.getAltitude() < 0.66) {
+            return AltitudeAffichee.MOYENNE;
+        }
+
+        return AltitudeAffichee.ELEVEE;
     }
 
     public HydrometrieAffichee getHydrometrieAffichee(int x, int y) {
         Terrain terrain = carte.getTerrain(x, y);
-        determineurTerrain.determinerTerrain(terrain.getAltitude(), terrain.getHydrometrie(), terrain.getTemperature());
+
+        if (terrain.getHydrometrie() < 0.33 ) {
+            return HydrometrieAffichee.SEC;
+        } else if (terrain.getHydrometrie() < 0.66) {
+            return HydrometrieAffichee.MOYEN;
+        }
+
+        return HydrometrieAffichee.HUMIDE;
     }
 
-    public String getTypeTerrain(int x, int y) {
+    public TypeTerrain getTypeTerrain(int x, int y) {
         Terrain terrain = carte.getTerrain(x, y);
-        return determineurTerrain.determinerTerrain(terrain.getAltitude(), terrain.getHydrometrie(), terrain.getTemperature();
+        return determineurTerrain.determinerTerrain(terrain.getAltitude(), terrain.getHydrometrie(), terrain.getTemperature());
+    }
+
+    public Terrain getTerrain(int x, int y) {
+        return carte.getTerrain(x, y);
     }
 }

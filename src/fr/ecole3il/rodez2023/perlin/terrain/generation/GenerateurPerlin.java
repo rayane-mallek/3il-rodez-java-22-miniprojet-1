@@ -13,10 +13,8 @@ public class GenerateurPerlin extends GenerateurCarte {
      * Constructeur du générateur de bruit de Perlin.
      *
      * @param graine La graine utilisée pour initialiser le générateur de bruit.
-     * @param largeur La largeur de la carte.
-     * @param hauteur La hauteur de la carte.
      */
-    public GenerateurPerlin(long graine, int largeur, int hauteur) {
+    public GenerateurPerlin(long graine) {
         super(graine);
 
         bruitAltitude = new SuperBruitPerlin2D(graine * 2, 1);
