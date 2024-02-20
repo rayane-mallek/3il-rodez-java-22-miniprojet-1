@@ -19,7 +19,6 @@ import fr.ecole3il.rodez2023.perlin.Utils;
  */
 public class SuperBruitPerlin2D extends Bruit2D {
 
-    // Vecteurs de gradient pour le bruit de Perlin
     private static final double[][] GRADIENT_2D = { { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 }, { 1, 0 }, { -1, 0 },
             { 0, 1 }, { 0, -1 } };
 

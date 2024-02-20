@@ -38,21 +38,11 @@ public class GenerateurPerlin extends GenerateurCarte {
         double y = (double) j / hauteur;
 
         // Génération des valeurs d'altitude, hydrométrie et température en utilisant le bruit de Perlin
-        int altitude = normaliserValeur(bruitAltitude.bruit2D(x, y));
-        int hydrometrie = normaliserValeur(bruitHydrometrie.bruit2D(x, y));
-        int temperature = normaliserValeur(bruitTemperature.bruit2D(x, y));
+        double altitude = bruitAltitude.bruit2D(x, y);
+        double hydrometrie = bruitHydrometrie.bruit2D(x, y);
+        double temperature = bruitTemperature.bruit2D(x, y);
 
         return new Terrain(altitude, hydrometrie, temperature);
-    }
-
-    /**
-     * Normalise la valeur du bruit de Perlin à l'intervalle [0, 100].
-     *
-     * @param valeur La valeur du bruit de Perlin.
-     * @return La valeur normalisée dans l'intervalle [0, 100].
-     */
-    private int normaliserValeur(double valeur) {
-        return (int) (Math.abs(valeur) * 100);
     }
 }
 

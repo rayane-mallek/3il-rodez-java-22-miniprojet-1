@@ -76,7 +76,7 @@ public class Terrain {
      * @return true si la valeur est dans l'intervalle, false sinon.
      */
     private boolean estDansInterval(double min, double max, double valeur) {
-        return valeur >= min && valeur <= max;
+        return valeur >= min - 1e-10 && valeur <= max + 1e-10;
     }
 
     /**
