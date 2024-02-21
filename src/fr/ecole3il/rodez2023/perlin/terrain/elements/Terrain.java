@@ -62,7 +62,10 @@ public class Terrain {
      * @throws MauvaiseValeurException Si une valeur est en dehors des limites spécifiées.
      */
     private void verifierLimites(double hydrometrie, double temperature, double altitude) throws MauvaiseValeurException {
-        if (!estDansInterval(0, 1, hydrometrie) || !estDansInterval(0, 1, temperature) || !estDansInterval(-1, 1, altitude)) {
+        System.out.println("after altitude" + altitude);
+        System.out.println("after hydr" + hydrometrie);
+        System.out.println("after tmp" + temperature);
+        if (estDansInterval(0, 1, hydrometrie) || estDansInterval(0, 1, temperature) || estDansInterval(-1, 1, altitude)) {
             throw new MauvaiseValeurException("Les valeurs doivent respecter les limites spécifiées.");
         }
     }
@@ -76,7 +79,7 @@ public class Terrain {
      * @return true si la valeur est dans l'intervalle, false sinon.
      */
     private boolean estDansInterval(double min, double max, double valeur) {
-        return valeur >= min - 1e-10 && valeur <= max + 1e-10;
+        return !(valeur >= min) || !(valeur <= max);
     }
 
     /**

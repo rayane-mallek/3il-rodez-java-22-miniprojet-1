@@ -49,68 +49,57 @@ public class SuperBruitPerlin2D extends Bruit2D {
         this.permutation = Utils.melanger(PERMUTATION, graine);
     }
 
-    /**
-     * Génère une valeur de bruit de Perlin bidimensionnel à la position spécifiée.
-     *
-     * @param x La coordonnée x de la position.
-     * @param y La coordonnée y de la position.
-     * @return La valeur de bruit de Perlin à la position donnée.
-     */
-    @Override
     public double bruit2D(double x, double y) {
-        // Adapter pour la résolution
-        x /= getResolution();
-        y /= getResolution();
+        int x0, y0, ii, jj, gi0, gi1, gi2, gi3;
+        double tmp, s, t, u, v, Cx, Cy;
 
-        // Obtenir les coordonnées de la grille associées à (x, y)
-        int x0 = (int) (x);
-        int y0 = (int) (y);
+        x0 = (int) (x / getResolution());
+        y0 = (int) (y / getResolution());
 
-        // Masquage pour récupérer les indices de permutation
-        int ii = x0 & 255;
-        int jj = y0 & 255;
+        ii = x0 & 255;
+        jj = y0 & 255;
 
-        // Récupérer les indices de gradient associés aux coins du quadrilatère
-        int gi0 = permutation[ii + permutation[jj]] % 8;
-        int gi1 = permutation[ii + 1 + permutation[jj]] % 8;
-        int gi2 = permutation[ii + permutation[jj + 1]] % 8;
-        int gi3 = permutation[ii + 1 + permutation[jj + 1]] % 8;
+        gi0 = permutation[((ii + permutation[jj]) % 256)] % 8;
+        gi1 = permutation[((ii + 1) + permutation[jj]) % 256] % 8;
+        gi2 = permutation[(ii + permutation[(jj + 1) % 256]) % 256] % 8;
+        gi3 = permutation[(ii + 1 + permutation[(jj + 1) % 256]) % 256] % 8;
 
-        // Récupérer les vecteurs de gradient et effectuer des interpolations pondérées
-        double s = produitScalaire(GRADIENT_2D[gi0], x - x0, y - y0);
-        double t = produitScalaire(GRADIENT_2D[gi1], x - (x0 + 1), y - y0);
-        double u = produitScalaire(GRADIENT_2D[gi2], x - x0, y - (y0 + 1));
-        double v = produitScalaire(GRADIENT_2D[gi3], x - (x0 + 1), y - (y0 + 1));
+        s = produitScalaire(GRADIENT_2D[gi0], x - x0, y - y0);
+        t = produitScalaire(GRADIENT_2D[gi1], x - (x0 + 1), y - y0);
+        u = produitScalaire(GRADIENT_2D[gi2], x - x0, y - (y0 + 1));
+        v = produitScalaire(GRADIENT_2D[gi3], x - (x0 + 1), y - (y0 + 1));
 
-        // Interpolations pour lisser les valeurs obtenues
-        double tmp = x - x0;
-        double Cx = lissage(3 * tmp * tmp - 2 * tmp * tmp * tmp);
+        tmp = x / getResolution() - x0;
+        Cx = lissage(tmp);
 
-        //double Li1 = s + Cx * (t - s);
-        //double Li2 = u + Cx * (v - u);
-        double Li1 = interpolation(Cx, s, t);
-        double Li2 = interpolation(Cx, u, v);
+        tmp = y / getResolution() - y0;
+        Cy = lissage(tmp);
 
-        tmp = y - y0;
-        double Cy = lissage(3 * tmp * tmp - 2 * tmp * tmp * tmp);
-
-        //return Li2 + Cy * (Li2 - Li1);
-        return interpolation(Cy, Li2, Li1);
+        return interpolation(Cy, interpolation(Cx, s, t), interpolation(Cx, u, v));
     }
+
+    /**
+     * Méthode interne utilisée pour lisser les valeurs obtenues.
+     * @param t La valeur à lisser.
+     * @return La valeur lissée.
+     */
+    private double lissage(double t) {
+        return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+
+    /**
+     * Méthode interne utilisée pour interpoler les valeurs obtenues.
+     * @param t La valeur à interpoler.
+     * @param a le paramètre a de l'interpolation.
+     * @param b le paramètre b de l'interpolation.
+     * @return La valeur interpolée.
+     */
+    private double interpolation(double t, double a, double b) {
+        return a + t * (b - a);
+    }
+
 
     private double produitScalaire(double[] vecteur, double x, double y) {
         return vecteur[0] * x + vecteur[1] * y;
     }
-
-    private double lissage(double t) {
-        // Appliquer une fonction de lissage spécifique à Perlin
-        // Assurez-vous de gérer les erreurs d'arrondi avec soin ici
-        return t * t * t * (t * (t * 6 - 15) + 10);
-    }
-
-    private double interpolation(double t, double a, double b) {
-        // Effectuer une interpolation linéaire
-        return a + t * (b - a);
-    }
-
 }
